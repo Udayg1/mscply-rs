@@ -89,8 +89,6 @@ async fn main() {
             return;
         }
     };
-    mpv.set_property("msg-level", "all=info").unwrap();
-    mpv.set_property("log-file", "/tmp/mpv_playback.log").unwrap();
     mpv.set_property("demuxer-lavf-o", "protocol_whitelist=[file,https,http,tls,tcp,crypto,data]").unwrap();
 
     // println!("{}",hh);
@@ -104,7 +102,7 @@ async fn main() {
             break;
         }
         let data = search_result(name).await.unwrap();
-        println!("Results: ");
+        println!("\nResults: ");
         let items = data
             .get("data")
             .and_then(|d| d.get("items"))
@@ -174,5 +172,6 @@ async fn main() {
         } else {
             continue;
         }
+        println!("");
     }
 }
