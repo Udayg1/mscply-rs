@@ -4,10 +4,10 @@ use reqwest::header::USER_AGENT;
 use serde_json;
 use serde_json::Value;
 use std::io::{Write, stdin, stdout};
+use std::env;
 
 const AGENT: &str = "Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0";
 const QUERYBASE: &str = "https://maus.qqdl.site/search/?s=";
-// const REFERER: &str = "https://tidal.squid.wtf/";
 const STREAM: &str = "https://tidal.kinoplus.online/track/?";
 
 async fn get_song(id: i32, audio_quality: &str) -> Result<Value, reqwest::Error> {
@@ -55,20 +55,16 @@ fn decode_base64(encoded: &str) -> String {
 fn queue_mpd_song(mpv: &mut Mpv, mpd: &str) {
     use std::fs::OpenOptions;
     use std::io::Write;
-
-    // Write MPD to a file
-    let path = "/tmp/mpv_queue.mpd";
+    let path = format!("{}/mpd_file.mpd", env::temp_dir().display());
     let mut f = OpenOptions::new()
         .write(true)
         .create(true)
         .truncate(true)
-        .open(path)
+        .open(&path)
         .unwrap();
     writeln!(f, "{}", mpd).unwrap();
-    f.flush().unwrap(); // make sure MPV sees the complete file
-
-    // Now queue the playlist
-    queue_song(mpv, path);
+    f.flush().unwrap();
+    queue_song(mpv, &path);
 }
 
 fn queue_song(mpv: &mut Mpv, url: &str) {
@@ -90,8 +86,6 @@ async fn main() {
         }
     };
     mpv.set_property("demuxer-lavf-o", "protocol_whitelist=[file,https,http,tls,tcp,crypto,data]").unwrap();
-
-    // println!("{}",hh);
     loop {
         print!("Enter song name (or q to quit): ");
         stdout().flush().unwrap();
