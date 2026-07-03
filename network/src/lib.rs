@@ -22,7 +22,8 @@ pub static IS_CACHING: AtomicBool = AtomicBool::new(false);
 pub const AGENT: &str = "Mozilla/5.0 (X11; Linux x86_64; rv:149.0) Gecko/20100101 Firefox/149.0";
 pub static FALLBACK_STREAM: &str = "https://dzr.tabs-vs-spaces.wtf";
 pub static FALLBACK: &str = "https://tidal-proxy.monochrome.tf/openapi/v2";
-static SUGGESTION_SOURCE: &str = "https://spotiflac.eclipsemusic.app/c30db2d39f17902c";
+static SUGGESTION_SOURCE: &str =
+    "https://monochrome1.cyrusna29.workers.dev/u/fd3963db40cc3d5fc0720b460be2";
 static TOKEN: LazyLock<Mutex<String>> = LazyLock::new(|| Mutex::new(String::new()));
 
 pub struct CacheItem {
